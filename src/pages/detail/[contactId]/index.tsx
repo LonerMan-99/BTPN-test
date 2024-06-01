@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import { useDetailRepository } from "@/data/repository/detail.repository";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Footer from "@/components/footer/footer";
+import { error } from "console";
 
 const Detail = () => {
  const router = useRouter();
@@ -57,12 +58,9 @@ const Detail = () => {
   onSuccess: () => {
    refetch();
    setIsDisabledInput(true);
-   onOpen();
-   setTimeout(() => {
-    onClose();
-   }, 2000);
   },
-  onError: () => {
+  onError: (error) => {},
+  onSettled: () => {
    onOpen();
    setTimeout(() => {
     onClose();

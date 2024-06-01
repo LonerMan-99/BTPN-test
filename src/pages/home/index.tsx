@@ -16,8 +16,8 @@ import {
  AlertIcon,
  useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { AddIcon, WarningTwoIcon } from "@chakra-ui/icons";
+import React from "react";
+import { AddIcon } from "@chakra-ui/icons";
 import Navigation from "@/components/navigation/navigation";
 import { NAVIGATION_CONSTANT } from "@/constant/navigation.constant";
 import ContactCard from "@/components/contact-card/contact-card";
@@ -29,6 +29,7 @@ import { RootState } from "@/store/store";
 import FormAddContact from "@/components/form/form-add-contact";
 import Empty from "@/components/empty/empty";
 import Footer from "@/components/footer/footer";
+import { error } from "console";
 
 const Home = () => {
  const router = useRouter();
@@ -68,13 +69,9 @@ const Home = () => {
   mutationFn: () => postAddNewContact(addContactRequest),
   onSuccess: () => {
    refetch();
-   dispatch(closePopupAddContact());
-   onOpen();
-   setTimeout(() => {
-    onClose();
-   }, 1500);
   },
-  onError: () => {
+  onError: (error) => {},
+  onSettled: () => {
    dispatch(closePopupAddContact());
    onOpen();
    setTimeout(() => {
@@ -87,12 +84,9 @@ const Home = () => {
   mutationFn: (contactId: string) => deleteContact(contactId),
   onSuccess: () => {
    refetch();
-   onOpen();
-   setTimeout(() => {
-    onClose();
-   }, 1500);
   },
-  onError: () => {
+  onError: (error) => {},
+  onSettled: () => {
    onOpen();
    setTimeout(() => {
     onClose();
@@ -100,7 +94,14 @@ const Home = () => {
   },
  });
 
- const showTextSuccess = (): string => {
+ const handleStatusAlert = (): any => {
+  if (mutationPostAddNewContact.isSuccess || mutationDeleteContact.isSuccess)
+   return "success";
+
+  return "error";
+ };
+
+ const showAlertTextSuccess = (): string => {
   if (mutationPostAddNewContact.isSuccess) return "Success add new contact";
   if (mutationDeleteContact.isSuccess) return "Success add delete contact";
 
@@ -114,11 +115,7 @@ const Home = () => {
    </PopupDialog>
    {isVisible && (
     <Alert
-     status={
-      mutationPostAddNewContact.isSuccess || mutationDeleteContact.isSuccess
-       ? "success"
-       : "error"
-     }
+     status={handleStatusAlert()}
      zIndex={999}
      maxWidth={480}
      position="fixed"
@@ -128,7 +125,7 @@ const Home = () => {
      w="100%"
     >
      <AlertIcon />
-     {showTextSuccess()}
+     {showAlertTextSuccess()}
     </Alert>
    )}
    <Box
@@ -149,7 +146,7 @@ const Home = () => {
    <Box marginTop={24} marginBottom={5} padding="0 8px">
     <Navigation items={NAVIGATION_CONSTANT} />
    </Box>
-   <Box padding="0 16px">
+   <Box padding="0 16px" paddingBottom="30px">
     <Text fontWeight="bold" fontSize={11}>
      All Contacts
     </Text>
@@ -172,9 +169,9 @@ const Home = () => {
         <Skeleton key={item.id} isLoaded={!isFetching}>
          <ContactCard
           data={item}
-          onDelete={() => mutationDeleteContact.mutate(item?.id ?? "")}
+          onDelete={() => mutationDeleteContact.mutate(item?.id)}
           isDeleteLoading={mutationDeleteContact.isPending}
-          onDetail={() => router.push(`/detail/${item.id}`)}
+          onDetail={() => router.push(`/detail/${item?.id}`)}
          />
         </Skeleton>
        ))
@@ -182,7 +179,17 @@ const Home = () => {
      </Box>
     )}
    </Box>
-   <Footer />
+   <Box
+    maxWidth={480}
+    position="fixed"
+    bottom={0}
+    left="auto"
+    right="auto"
+    w="100%"
+    zIndex={100}
+   >
+    <Footer />
+   </Box>
   </Box>
  );
 };
