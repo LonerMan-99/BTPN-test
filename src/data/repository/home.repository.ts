@@ -5,6 +5,7 @@ import {
  BaseResponse,
  ContactsListItem,
 } from "../model/home.model";
+import { generateRandomString } from "@/services/generate-string";
 
 interface useHomeRepository {
  getListAllContacts(): Promise<BaseResponse<ContactsListItem>>;
@@ -35,8 +36,7 @@ async function postAddNewContact(
   firstName: addContactRequest.firstName.replace(/\s/g, ""),
   lastName: addContactRequest.lastName.replace(/\s/g, ""),
   age: Number(addContactRequest.age),
-  photo:
-   "http://vignette1.wikia.nocookie.net/lotr/images/6/68/Bilbo_baggins.jpg/revision/latest?cb=20130202022550",
+  photo: `https://robohash.org/${generateRandomString()}`,
  };
  try {
   const response = await httpClient.post(
