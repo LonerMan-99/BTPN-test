@@ -1,3 +1,4 @@
+import React from "react";
 import {
  Box,
  Button,
@@ -7,34 +8,31 @@ import {
  Input,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { closePopupAddContact, saveFormAddContact } from "@/slicer/home-slicer";
+import { UpdateContactRequest } from "@/data/model/detail.model";
 import { addContactValidationSchema } from "@/validation/add-contact.validation";
 import { ContactRequest } from "@/data/model/home.model";
 
 interface props {
- onSubmit: () => void;
+ data: any;
+ handleSubmit: (values: ContactRequest) => void;
+ setIsDisabledInput: () => void;
+ isFieldDisabled: boolean;
 }
 
-const FormAddContact = ({ onSubmit }: props) => {
- const dispatch = useDispatch();
-
- const initialValues = {
-  firstName: "",
-  lastName: "",
-  age: "",
- };
-
- const handleSubmit = (values: ContactRequest) => {
-  dispatch(saveFormAddContact(values));
-  onSubmit();
+const FormUpdateContact = ({
+ data,
+ handleSubmit,
+ setIsDisabledInput,
+ isFieldDisabled,
+}: props) => {
+ const onSubmit = (values: UpdateContactRequest) => {
+  handleSubmit(values);
  };
 
  return (
   <Formik
-   initialValues={initialValues}
-   onSubmit={handleSubmit}
+   initialValues={{ ...data }}
+   onSubmit={onSubmit}
    validationSchema={addContactValidationSchema}
   >
    {(formik) => (
@@ -43,7 +41,7 @@ const FormAddContact = ({ onSubmit }: props) => {
       {({ field, form }: any) => (
        <FormControl isInvalid={form.errors.firstName && form.touched.firstName}>
         <FormLabel>First name</FormLabel>
-        <Input {...field} id="firstname" />
+        <Input {...field} id="firstname" isDisabled={isFieldDisabled} />
         <FormErrorMessage>{form.errors.firstName}</FormErrorMessage>
        </FormControl>
       )}
@@ -53,7 +51,7 @@ const FormAddContact = ({ onSubmit }: props) => {
       {({ field, form }: any) => (
        <FormControl isInvalid={form.errors.lastName && form.touched.lastName}>
         <FormLabel>Last name</FormLabel>
-        <Input {...field} id="lastname" />
+        <Input {...field} id="lastname" isDisabled={isFieldDisabled} />
         <FormErrorMessage>{form.errors.lastName}</FormErrorMessage>
        </FormControl>
       )}
@@ -63,7 +61,7 @@ const FormAddContact = ({ onSubmit }: props) => {
       {({ field, form }: any) => (
        <FormControl isInvalid={form.errors.age && form.touched.age}>
         <FormLabel>Age</FormLabel>
-        <Input {...field} id="age" />
+        <Input {...field} id="age" isDisabled={isFieldDisabled} />
         <FormErrorMessage>{form.errors.age}</FormErrorMessage>
        </FormControl>
       )}
@@ -75,10 +73,15 @@ const FormAddContact = ({ onSubmit }: props) => {
       mt={6}
       justifyContent="end"
      >
-      <Button variant="ghost" onClick={() => dispatch(closePopupAddContact())}>
-       Close
+      <Button colorScheme="teal" onClick={setIsDisabledInput}>
+       Edit
       </Button>
-      <Button type="submit" colorScheme="blue" isLoading={formik.isSubmitting}>
+      <Button
+       type="submit"
+       colorScheme="blue"
+       isDisabled={isFieldDisabled}
+       isLoading={formik.isSubmitting}
+      >
        Submit
       </Button>
      </Box>
@@ -88,4 +91,4 @@ const FormAddContact = ({ onSubmit }: props) => {
  );
 };
 
-export default FormAddContact;
+export default FormUpdateContact;
