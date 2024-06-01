@@ -28,6 +28,7 @@ import PopupDialog from "@/components/popup-dialog/popup-dialog";
 import { RootState } from "@/store/store";
 import FormAddContact from "@/components/form/form-add-contact";
 import Empty from "@/components/empty/empty";
+import Footer from "@/components/footer/footer";
 
 const Home = () => {
  const router = useRouter();
@@ -84,7 +85,13 @@ const Home = () => {
 
  const mutationDeleteContact = useMutation({
   mutationFn: (contactId: string) => deleteContact(contactId),
-  onSuccess: () => refetch(),
+  onSuccess: () => {
+   refetch();
+   onOpen();
+   setTimeout(() => {
+    onClose();
+   }, 1500);
+  },
   onError: () => {
    onOpen();
    setTimeout(() => {
@@ -93,14 +100,25 @@ const Home = () => {
   },
  });
 
+ const showTextSuccess = (): string => {
+  if (mutationPostAddNewContact.isSuccess) return "Success add new contact";
+  if (mutationDeleteContact.isSuccess) return "Success add delete contact";
+
+  return "There was an error processing your request";
+ };
+
  return (
-  <Box maxWidth={480} margin="0 auto">
+  <Box maxWidth={480} height="100vh" margin="0 auto">
    <PopupDialog onShownModal={isPopupAddContactOpen}>
     <FormAddContact onSubmit={() => mutationPostAddNewContact.mutate()} />
    </PopupDialog>
    {isVisible && (
     <Alert
-     status={mutationPostAddNewContact.isSuccess ? "success" : "error"}
+     status={
+      mutationPostAddNewContact.isSuccess || mutationDeleteContact.isSuccess
+       ? "success"
+       : "error"
+     }
      zIndex={999}
      maxWidth={480}
      position="fixed"
@@ -110,9 +128,7 @@ const Home = () => {
      w="100%"
     >
      <AlertIcon />
-     {mutationPostAddNewContact.isSuccess
-      ? "Success add new contact"
-      : "There was an error processing your request"}
+     {showTextSuccess()}
     </Alert>
    )}
    <Box
@@ -166,6 +182,7 @@ const Home = () => {
      </Box>
     )}
    </Box>
+   <Footer />
   </Box>
  );
 };

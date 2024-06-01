@@ -19,6 +19,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useDetailRepository } from "@/data/repository/detail.repository";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import Footer from "@/components/footer/footer";
 
 const Detail = () => {
  const router = useRouter();
@@ -40,16 +41,13 @@ const Detail = () => {
  } = useDisclosure({ defaultIsOpen: false });
 
  const { data, isFetching, refetch } = useQuery({
-  queryKey: ["detail-contact"],
+  queryKey: ["detail-contact", contactId],
   queryFn: async () => {
    try {
     const response = await getDetailContact(contactId);
     return response;
    } catch (error) {
-    onOpen();
-    setTimeout(() => {
-     onClose();
-    }, 2000);
+    throw error;
    }
   },
  });
@@ -94,7 +92,7 @@ const Detail = () => {
  };
 
  return (
-  <Box maxWidth={480} margin="0 auto">
+  <Box maxWidth={480} height="100vh" margin="0 auto" position="relative">
    {isVisible && (
     <Alert
      status={mutationUpdateExistingContact.isSuccess ? "success" : "error"}
@@ -197,6 +195,9 @@ const Detail = () => {
       </form>
      </Box>
     )}
+   </Box>
+   <Box w="100%" position="absolute" left={0} bottom={0} right={0}>
+    <Footer />
    </Box>
   </Box>
  );
