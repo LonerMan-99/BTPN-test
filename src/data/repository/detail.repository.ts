@@ -1,10 +1,9 @@
 import useHttpClient from "@/services/http-client";
 import { AxiosInstance } from "axios";
-import { ContactsListItem } from "../model/home.model";
 import { UpdateContactRequest } from "../model/detail.model";
 
 interface useDetailRepository {
- getDetailContact(contactId: any): Promise<ContactsListItem>;
+ getDetailContact(contactId: any): Promise<UpdateContactRequest>;
  putUpdateExistingContact(
   contactId: any,
   updateContactRequest: UpdateContactRequest
@@ -14,13 +13,13 @@ interface useDetailRepository {
 async function getDetailContact(
  contactId: string,
  httpClient: AxiosInstance
-): Promise<ContactsListItem> {
+): Promise<UpdateContactRequest> {
  try {
   const response = await httpClient.get(
    `https://contact.herokuapp.com/contact/${contactId}`
   );
 
-  const responseData: ContactsListItem = response.data.data;
+  const responseData: UpdateContactRequest = response.data.data;
   return responseData;
  } catch (error) {
   throw error;
