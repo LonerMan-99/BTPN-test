@@ -1,10 +1,7 @@
 import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import {
- closePopupAddContact,
- saveFormAddContact,
-} from "@/slicer/home-slicer";
+import { closePopupAddContact, saveFormAddContact } from "@/slicer/home-slicer";
 
 interface props {
  onSubmit: () => void;
@@ -14,7 +11,6 @@ const FormAddContact = ({ onSubmit }: props) => {
  const dispatch = useDispatch();
 
  const [formData, setFormData] = useState({
-  photo: "",
   firstName: "",
   lastName: "",
   age: "",
@@ -37,14 +33,7 @@ const FormAddContact = ({ onSubmit }: props) => {
  return (
   <form onSubmit={handleSubmit}>
    <FormControl>
-    <FormLabel>Photo</FormLabel>
-    <Input
-     type="file"
-     name="photo"
-     value={formData.photo}
-     onChange={handleInputChange}
-    />
-    <FormLabel mt={2}>First name</FormLabel>
+    <FormLabel>First name</FormLabel>
     <Input
      name="firstName"
      placeholder="First name"

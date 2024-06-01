@@ -1,12 +1,13 @@
 import useHttpClient from "@/services/http-client";
 import { AxiosInstance } from "axios";
-import { ContactRequest, ContactsListItem } from "../model/home.model";
+import { ContactsListItem } from "../model/home.model";
+import { UpdateContactRequest } from "../model/detail.model";
 
 interface useDetailRepository {
  getDetailContact(contactId: any): Promise<ContactsListItem>;
  putUpdateExistingContact(
   contactId: any,
-  updateContactRequest: ContactRequest
+  updateContactRequest: UpdateContactRequest
  ): Promise<any>;
 }
 
@@ -28,15 +29,14 @@ async function getDetailContact(
 
 async function putUpdateExistingContact(
  contactId: string,
- updateContactRequest: ContactRequest,
+ updateContactRequest: UpdateContactRequest,
  httpClient: AxiosInstance
 ): Promise<any> {
  const request = {
   firstName: updateContactRequest.firstName,
   lastName: updateContactRequest.lastName,
   age: Number(updateContactRequest.age),
-  photo:
-   "http://vignette1.wikia.nocookie.net/lotr/images/6/68/Bilbo_baggins.jpg/revision/latest?cb=20130202022550",
+  photo: updateContactRequest.photo,
  };
  try {
   const response = await httpClient.put(
@@ -58,7 +58,7 @@ export function useDetailRepository(): useDetailRepository {
   },
   putUpdateExistingContact: async (
    contactId: string,
-   updateContactRequest: ContactRequest
+   updateContactRequest: UpdateContactRequest
   ) => {
    return putUpdateExistingContact(contactId, updateContactRequest, httpClient);
   },

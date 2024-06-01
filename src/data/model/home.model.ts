@@ -13,7 +13,6 @@ export interface ContactsListItem {
 
 export interface ContactRequest {
  age: string;
- photo: string;
  firstName: string;
  lastName: string;
 }
