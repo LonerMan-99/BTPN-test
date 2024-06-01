@@ -13,7 +13,6 @@ const initialState: HomeState = {
  isPopupOpen: false,
  addFormData: {
   age: "",
-  photo: "",
   firstName: "",
   lastName: "",
  },
@@ -40,7 +39,6 @@ export const homeSlice = createSlice({
  },
 });
 
-// Action creators are generated for each case reducer function
 export const {
  openPopupAddContact,
  closePopupAddContact,
