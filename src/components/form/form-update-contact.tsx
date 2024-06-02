@@ -17,6 +17,7 @@ interface props {
  handleSubmit: (values: ContactRequest) => void;
  setIsDisabledInput: () => void;
  isFieldDisabled: boolean;
+ isLoading?: boolean;
 }
 
 const FormUpdateContact = ({
@@ -24,6 +25,7 @@ const FormUpdateContact = ({
  handleSubmit,
  setIsDisabledInput,
  isFieldDisabled,
+ isLoading,
 }: props) => {
  const onSubmit = (values: UpdateContactRequest) => {
   handleSubmit(values);
@@ -80,7 +82,7 @@ const FormUpdateContact = ({
        type="submit"
        colorScheme="blue"
        isDisabled={isFieldDisabled}
-       isLoading={formik.isSubmitting}
+       isLoading={isLoading}
       >
        Submit
       </Button>

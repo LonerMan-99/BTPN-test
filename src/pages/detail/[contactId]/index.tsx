@@ -27,12 +27,11 @@ const Detail = () => {
  } = useDetailHook();
 
  return (
-  <Box height="100vh" margin="0 auto" position="relative">
+  <Box height="100vh" position="relative">
    {isVisible && (
     <Alert
      status={mutationUpdateExistingContact.isSuccess ? "success" : "error"}
      zIndex={999}
-     maxWidth={480}
      position="fixed"
      top={0}
      left="auto"
@@ -84,6 +83,7 @@ const Detail = () => {
         handleSubmit={onSubmit}
         isFieldDisabled={isDisabledInput}
         setIsDisabledInput={() => setIsDisabledInput(false)}
+        isLoading={mutationUpdateExistingContact.isPending}
        />
       </Box>
      </Box>
