@@ -14,7 +14,6 @@ import { AddIcon } from "@chakra-ui/icons";
 import Navigation from "@/components/navigation/navigation";
 import { NAVIGATION_CONSTANT } from "@/constant/navigation.constant";
 import ContactCard from "@/components/contact-card/contact-card";
-
 import { ContactsListItem } from "@/data/model/home.model";
 import PopupDialog from "@/components/popup-dialog/popup-dialog";
 import FormAddContact from "@/components/form/form-add-contact";
@@ -39,7 +38,10 @@ const Home = () => {
  return (
   <Box w="100%" maxWidth={480} margin="0 auto">
    <PopupDialog onShownModal={isPopupAddContactOpen}>
-    <FormAddContact onSubmit={() => mutationPostAddNewContact.mutate()} />
+    <FormAddContact
+     onSubmit={() => mutationPostAddNewContact.mutate()}
+     isLoading={mutationPostAddNewContact.isPending}
+    />
    </PopupDialog>
    {isVisible && (
     <Alert

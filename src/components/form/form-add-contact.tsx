@@ -15,9 +15,10 @@ import { ContactRequest } from "@/data/model/home.model";
 
 interface props {
  onSubmit: () => void;
+ isLoading?: boolean;
 }
 
-const FormAddContact = ({ onSubmit }: props) => {
+const FormAddContact = ({ onSubmit, isLoading }: props) => {
  const dispatch = useDispatch();
 
  const initialValues = {
@@ -78,7 +79,7 @@ const FormAddContact = ({ onSubmit }: props) => {
       <Button variant="ghost" onClick={() => dispatch(closePopupAddContact())}>
        Close
       </Button>
-      <Button type="submit" colorScheme="blue" isLoading={formik.isSubmitting}>
+      <Button type="submit" colorScheme="blue" isLoading={isLoading}>
        Submit
       </Button>
      </Box>
